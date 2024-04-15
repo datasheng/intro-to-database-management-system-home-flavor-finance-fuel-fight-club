@@ -12,7 +12,7 @@ const bcrypt = require('bcrypt');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root123',
+    password: '', // Input your own sql workbench password
     database: '336-login',
     port: 3306
 });
