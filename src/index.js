@@ -7,13 +7,13 @@ import {
   Navigate,
 } from 'react-router-dom';
 
-import './style.css'; // Make sure the path to your CSS file is correct
-import Home from './views/home';
-import NotFound from './views/not-found';
-import Login from './components/Login'; // Import the Login component, adjust the path as necessary
-import Signup from './components/Signup';
-import Dashboard from './views/Dashboard';
-import Profile from './components/Profile';
+import './frontend/style.css'; // Make sure the path to your CSS file is correct
+import Home from './frontend/home';
+import NotFound from './frontend/not-found';
+import Login from './frontend/Login'; // Import the Login component, adjust the path as necessary
+import Signup from './frontend/Signup';
+import Dashboard from './frontend/Dashboard';
+import Profile from './frontend/Profile';
 // Example function placeholders, replace with your actual logic
 const handleLogin = (username, password) => {
   console.log("Logging in with:", username, password);
