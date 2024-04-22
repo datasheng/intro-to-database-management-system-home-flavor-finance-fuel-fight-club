@@ -1,4 +1,3 @@
-// helpers/database.js
 const mysql = require('mysql2');
 
 // Setup a connection pool
