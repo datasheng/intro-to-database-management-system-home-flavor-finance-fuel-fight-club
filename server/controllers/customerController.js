@@ -29,7 +29,7 @@ const UserController = {
   async updateUser(req, res) {
     // Extract the user ID from the request parameters and user details from the request body
     const userId = req.params.id;
-    const { firstName, lastName, email, /* other user details */ } = req.body;
+    const { firstName, lastName, email, password, phoneNumber /* other user details */ } = req.body;
     try {
       // Fetch the user by ID
       const user = await User.findByPk(userId);
@@ -42,6 +42,8 @@ const UserController = {
       user.firstName = firstName;
       user.lastName = lastName;
       user.email = email;
+      user.password = password;
+      user.phoneNumber = phoneNumber;
       /* update other user details as needed */
 
       // Save the updated user details to the database
@@ -56,7 +58,31 @@ const UserController = {
     }
   },
 
-  // Other controller methods like createUser, deleteUser, etc., can be added here
+  // Method to delete a user by ID
+  async deleteUser(req, res) {
+    // Extract the user ID from the request parameters
+    const userId = req.params.id;
+    try {
+      // Fetch the user by ID
+      const user = await User.findByPk(userId);
+      if (!user) {
+        // If the user is not found, return an error response
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Delete the user record from the database
+      await user.destroy();
+
+      // Send a success message as JSON response
+      res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+      // Handle errors when deleting user
+      console.error('Error deleting user:', error);
+      res.status(500).json({ error: 'Failed to delete user' });
+    }
+  },
+
+  // Other controller methods like createUser, etc., can be added here
 };
 
 // Export the UserController object so that it can be used elsewhere in your application
