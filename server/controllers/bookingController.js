@@ -1,66 +1,96 @@
 // Import your Sequelize models
-const {availability,booking,classes,customer,payment,provider,service,service_location,user_address} = require('../models');
+const { Availability, Booking, Classes, Customer, Payment, Provider, Service, ServiceLocation, UserAddress } = require('../models');
 
-// Define your controller methods
-////////////////////////////////////////////////////////////////////////
+// Define BookingController methods
 const BookingController = {
-  // Method to get all bookings
-  async getAllBookings(req, res) {
-    try {
-      // Fetch all bookings with related Provider, Customer, and Availability data
-      const bookings = await Booking.findAll({
-        include: [Provider, Customer, Availability], // Include related models
-        // Add other options like where conditions, order, etc., as needed
-      });
-      // Send the bookings as JSON response
-      res.json(bookings);
-    } catch (error) {
-      // Handle errors when fetching bookings
-      console.error('Error fetching bookings:', error);
-      res.status(500).json({ error: 'Failed to fetch bookings' });
-    }
-  },
-////////////////////////////////////////////////////////////////////////
-
-  
-  // Method to create a new booking
+  // Method to create a new booking with associated data
   async createBooking(req, res) {
-    // Extract booking details from the request body
-    const { providerId, customerId, availabilityId, /* other booking details */ } = req.body;
+    const { providerId, customerId, availabilityId, serviceId, serviceLocationId, paymentId, startTime, endTime, bookingTime /* other booking details */ } = req.body;
     try {
-      // Create a new booking record in the database
+      // Validate input data
+      if (!providerId || !customerId || !availabilityId || !serviceId || !serviceLocationId || !paymentId || !startTime || !endTime || !bookingTime) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      // Check for scheduling conflicts or other business rules
+      // Example: Check if the provider is available during the specified time
+      const providerAvailability = await Availability.findByPk(availabilityId);
+      if (!providerAvailability || !providerAvailability.isAvailable(startTime, endTime)) {
+        return res.status(400).json({ error: 'Provider not available at the specified time' });
+      }
+
+      // Create a new booking record with associated data
       const booking = await Booking.create({
         providerId,
         customerId,
         availabilityId,
+        serviceId,
+        serviceLocationId,
+        paymentId,
+        startTime,
+        endTime,
+        bookingTime,
         /* other booking details */
       });
-      // Send the newly created booking as JSON response with status 201 (Created)
+
+      // Associate related models with the booking
+      await booking.setAvailability(providerAvailability);
+      await booking.setClasses(await Classes.findByPk(serviceId));
+      await booking.setCustomer(await Customer.findByPk(customerId));
+      await booking.setPayment(await Payment.findByPk(paymentId));
+      await booking.setProvider(await Provider.findByPk(providerId));
+      await booking.setService(await Service.findByPk(serviceId));
+      await booking.setServiceLocation(await ServiceLocation.findByPk(serviceLocationId));
+      // You may associate UserAddress or other related models here if needed
+
       res.status(201).json(booking);
     } catch (error) {
-      // Handle errors when creating a booking
       console.error('Error creating booking:', error);
       res.status(500).json({ error: 'Failed to create booking' });
     }
   },
-  /////////////////////////////////////////////////////////////////////////////
 
-  // Other controller methods like updateBooking, deleteBooking,
-
+  // Method to update a booking
   async updateBooking(req, res) {
-    const { bookingId } = req.params; // Extract the booking ID from the request parameters
-    const { providerId, customerId, availabilityId, /* other booking details */ } = req.body; // Extract updated booking details from the request body
+    const { bookingId } = req.params;
+    const { providerId, customerId, availabilityId, serviceId, serviceLocationId, paymentId, startTime, endTime, bookingTime /* other booking details */ } = req.body;
     try {
-      const booking = await Booking.findByPk(bookingId); // Find the booking by its ID
+      // Validate input data
+      if (!providerId || !customerId || !availabilityId || !serviceId || !serviceLocationId || !paymentId || !startTime || !endTime || !bookingTime) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      // Check if the booking exists
+      const booking = await Booking.findByPk(bookingId);
       if (!booking) {
-        return res.status(404).json({ error: 'Booking not found' }); // Return an error if the booking is not found
+        return res.status(404).json({ error: 'Booking not found' });
+      }
+      // Check for scheduling conflicts or other business rules
+      // Example: Check if the provider is available during the updated time
+      const providerAvailability = await Availability.findByPk(availabilityId);
+      if (!providerAvailability || !providerAvailability.isAvailable(startTime, endTime)) {
+        return res.status(400).json({ error: 'Provider not available at the updated time' });
       }
 
       // Update booking details
       booking.providerId = providerId;
       booking.customerId = customerId;
       booking.availabilityId = availabilityId;
+      booking.serviceId = serviceId;
+      booking.serviceLocationId = serviceLocationId;
+      booking.paymentId = paymentId;
+      booking.startTime = startTime;
+      booking.endTime = endTime;
+      booking.bookingTime = bookingTime;
       /* update other booking details as needed */
+
+      // Update associated models if necessary
+      await booking.setAvailability(providerAvailability);
+      await booking.setClasses(await Classes.findByPk(serviceId));
+      await booking.setCustomer(await Customer.findByPk(customerId));
+      await booking.setPayment(await Payment.findByPk(paymentId));
+      await booking.setProvider(await Provider.findByPk(providerId));
+      await booking.setService(await Service.findByPk(serviceId));
+      await booking.setServiceLocation(await ServiceLocation.findByPk(serviceLocationId));
+      // You may update UserAddress or other related models here if needed
 
       await booking.save(); // Save the updated booking details to the database
 
@@ -70,15 +100,18 @@ const BookingController = {
       res.status(500).json({ error: 'Failed to update booking' });
     }
   },
-/////////////////////////////////////////////////////////////////////////////
+
   // Method to delete a booking
   async deleteBooking(req, res) {
-    const { bookingId } = req.params; // Extract the booking ID from the request parameters
+    const { bookingId } = req.params;
     try {
-      const booking = await Booking.findByPk(bookingId); // Find the booking by its ID
+      // Check if the booking exists
+      const booking = await Booking.findByPk(bookingId);
       if (!booking) {
-        return res.status(404).json({ error: 'Booking not found' }); // Return an error if the booking is not found
+        return res.status(404).json({ error: 'Booking not found' });
       }
+
+      // Perform any additional business logic checks before deletion, if needed
 
       await booking.destroy(); // Delete the booking record from the database
 
@@ -89,10 +122,12 @@ const BookingController = {
     }
   },
 
-  
+  // Other controller methods like getAllBookings, etc., can be added here
+
 };
 
 module.exports = BookingController;
+
 
 /*
 
