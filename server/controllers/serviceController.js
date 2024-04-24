@@ -23,7 +23,7 @@ const ServiceController = {
   // Method to create a new service
   async createService(req, res) {
     // Extract service details from the request body
-    const { providerId, serviceName, /* other service details */ } = req.body;
+    const { providerId, serviceName, serviceCost /* other service details */ } = req.body;
     try {
       // Check if the provider exists
       const provider = await Provider.findByPk(providerId);
@@ -36,6 +36,7 @@ const ServiceController = {
       const service = await Service.create({
         providerId,
         serviceName,
+        serviceCost,
         /* other service details */
       });
 
@@ -48,11 +49,65 @@ const ServiceController = {
     }
   },
 
-  // Other controller methods like updateService, deleteService, etc., can be added here
+  // Method to update a service
+  async updateService(req, res) {
+    // Extract service ID from request parameters and service details from request body
+    const { serviceId } = req.params;
+    const { providerId, serviceName, serviceCost /* other service details */ } = req.body;
+    try {
+      // Find the service by ID
+      const service = await Service.findByPk(serviceId);
+      if (!service) {
+        // If service not found, return an error response
+        return res.status(404).json({ error: 'Service not found' });
+      }
+
+      // Update service details
+      service.providerId = providerId;
+      service.serviceName = serviceName;
+      service.serviceCost = serviceCost;
+      /* update other service details as needed */
+
+      // Save the updated service to the database
+      await service.save();
+
+      // Send the updated service as JSON response
+      res.json(service);
+    } catch (error) {
+      // Handle errors when updating service
+      console.error('Error updating service:', error);
+      res.status(500).json({ error: 'Failed to update service' });
+    }
+  },
+
+  // Method to delete a service
+  async deleteService(req, res) {
+    // Extract service ID from request parameters
+    const { serviceId } = req.params;
+    try {
+      // Find the service by ID
+      const service = await Service.findByPk(serviceId);
+      if (!service) {
+        // If service not found, return an error response
+        return res.status(404).json({ error: 'Service not found' });
+      }
+
+      // Delete the service from the database
+      await service.destroy();
+
+      // Send success message
+      res.status(204).send();
+    } catch (error) {
+      // Handle errors when deleting service
+      console.error('Error deleting service:', error);
+      res.status(500).json({ error: 'Failed to delete service' });
+    }
+  },
 };
 
-// Export the ServiceController object so that it can be used elsewhere in your application
+// Export the ServiceController object
 module.exports = ServiceController;
+
 
 /*
 
