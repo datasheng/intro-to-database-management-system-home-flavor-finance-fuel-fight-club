@@ -25,6 +25,31 @@ const UserController = {
     }
   },
 
+    // Method to create a new customer
+  async createCustomer(req, res) {
+    // Extract customer details from the request body
+    const { userAddressId, firstName, lastName, email, password, phoneNumber /* other customer details */ } = req.body;
+    try {
+      // Create a new user record in the database
+      const user = await User.create({
+        userAddressId,
+        firstName,
+        lastName,
+        email,
+        password,
+        phoneNumber,
+        /* other customer details */
+      });
+
+      // Send the newly created user as JSON response with status 201 (Created)
+      res.status(201).json(user);
+    } catch (error) {
+      // Handle errors when creating a customer
+      console.error('Error creating customer:', error);
+      res.status(500).json({ error: 'Failed to create customer' });
+    }
+  },
+
   // Method to update user details
   async updateUser(req, res) {
     // Extract the user ID from the request parameters and user details from the request body
@@ -82,8 +107,11 @@ const UserController = {
     }
   },
 
+
+
   // Other controller methods like createUser, etc., can be added here
 };
 
 // Export the UserController object so that it can be used elsewhere in your application
 module.exports = UserController;
+
