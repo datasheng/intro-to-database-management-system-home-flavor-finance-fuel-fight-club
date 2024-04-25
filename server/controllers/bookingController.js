@@ -1,5 +1,5 @@
 // Import your Sequelize models
-const { Availability, Booking, Classes, Customer, Payment, Provider, Service, ServiceLocation, UserAddress } = require('../models');
+const {} = require('../models');
 
 // Define BookingController methods
 const BookingController = {
