@@ -1,5 +1,5 @@
 // Import Sequelize models
-const { Provider } = require('../models');
+const { Provider } = require('../models/providerModel');
 
 // Define ProviderController methods
 const ProviderController = {
@@ -20,17 +20,16 @@ const ProviderController = {
   // Method to create a new provider
   async createProvider(req, res) {
     // Extract provider details from the request body
-    const { firstName, lastName, email, password, phoneNumber, payPerBooking /* other provider details */ } = req.body;
+    const { firstName, lastName, email, password, phoneNumber, payPerBooking} = req.body;
     try {
       // Create a new provider record in the database
       const provider = await Provider.create({
-        firstName,
-        lastName,
+        first_name: firstName,
+        last_name: lastName,
         email,
         password,
-        phoneNumber,
-        payPerBooking,
-        /* other provider details */
+        phone_number: phoneNumber,
+        pay_per_booking: payPerBooking,
       });
       // Send the newly created provider as JSON response with status 201 (Created)
       res.status(201).json(provider);
@@ -44,7 +43,7 @@ const ProviderController = {
   // Method to update a provider
   async updateProvider(req, res) {
     // Extract provider ID from request parameters and provider details from request body
-    const { providerId } = req.params;
+    const {providerId} = req.params;
     const { firstName, lastName, email, password, phoneNumber, payPerBooking /* other provider details */ } = req.body;
     try {
       // Find the provider by ID
@@ -55,12 +54,12 @@ const ProviderController = {
       }
 
       // Update provider details
-      provider.firstName = firstName;
-      provider.lastName = lastName;
+      provider.first_name = firstName;
+      provider.last_name = lastName;
       provider.email = email;
       provider.password = password;
-      provider.phoneNumber = phoneNumber;
-      provider.payPerBooking = payPerBooking;
+      provider.phone_number = phoneNumber;
+      provider.pay_per_booking = payPerBooking;
       /* update other provider details as needed */
 
       // Save the updated provider to the database
