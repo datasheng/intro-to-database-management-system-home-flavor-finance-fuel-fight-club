@@ -1,33 +1,20 @@
 // Import Sequelize models
-const { Payment, Booking, Customer } = require('../models');
+const {Payment} = require('../models/paymentModel');
 
 // Define PaymentController methods
 const PaymentController = {
   // Method to process a payment for a booking
   async processPayment(req, res) {
     // Extract payment details from the request body
-    const { bookingId, customerId, amount, paymentMethod /* other payment details */ } = req.body;
+    const { userAddressId, creditCardNumber, cvc, expirationDate } = req.body;
     try {
-      // Check if the booking exists and is associated with the customer
-      const booking = await Booking.findOne({
-        where: { id: bookingId, customerId },
+        //Create Payment record 
+        const payment = await Payment.create({
+        user_address_id: userAddressId,
+        credit_card_number: creditCardNumber,
+        cvc,
+        expiration_date: expirationDate,
       });
-      if (!booking) {
-        // If the booking is not found or not associated with the customer, return an error response
-        return res.status(404).json({ error: 'Booking not found or not associated with customer' });
-      }
-
-      // Create a payment record in the database
-      const payment = await Payment.create({
-        bookingId,
-        customerId,
-        amount,
-        paymentMethod,
-        /* other payment details */
-      });
-
-      // Update booking status or perform other actions as needed
-
       // Send the newly created payment as JSON response with status 201 (Created)
       res.status(201).json(payment);
     } catch (error) {
@@ -42,7 +29,6 @@ const PaymentController = {
     try {
       // Fetch all payments with related Booking and Customer data
       const payments = await Payment.findAll({
-        include: [Booking, Customer], // Include related models
         // Add other options like where conditions, order, etc., as needed
       });
       // Send the payments as JSON response
@@ -57,27 +43,15 @@ const PaymentController = {
   // Method to create a new payment
   async createPayment(req, res) {
     // Extract payment details from the request body
-    const { bookingId, customerId, amount, paymentMethod /* other payment details */ } = req.body;
+    const {userAddressId, creditCardNumber, cvc, expirationDate} = req.body;
     try {
-      // Check if the booking exists and is associated with the customer
-      const booking = await Booking.findOne({
-        where: { id: bookingId, customerId },
-      });
-      if (!booking) {
-        // If the booking is not found or not associated with the customer, return an error response
-        return res.status(404).json({ error: 'Booking not found or not associated with customer' });
-      }
-
       // Create a payment record in the database
       const payment = await Payment.create({
-        bookingId,
-        customerId,
-        amount,
-        paymentMethod,
-        /* other payment details */
+        user_address_id: userAddressId,
+        credit_card_number: creditCardNumber,
+        cvc,
+        expiration_date: expirationDate,
       });
-
-      // Update booking status or perform other actions as needed
 
       // Send the newly created payment as JSON response with status 201 (Created)
       res.status(201).json(payment);
@@ -91,8 +65,9 @@ const PaymentController = {
   // Method to update a payment
   async updatePayment(req, res) {
     // Extract payment ID from request parameters and payment details from request body
+    
     const { paymentId } = req.params;
-    const { amount, paymentMethod /* other payment details */ } = req.body;
+    const { userAddressId, creditCardNumber, cvc, expirationDate } = req.body;
     try {
       // Find the payment by ID
       const payment = await Payment.findByPk(paymentId);
@@ -102,10 +77,11 @@ const PaymentController = {
       }
 
       // Update payment details
-      payment.amount = amount;
-      payment.paymentMethod = paymentMethod;
-      /* update other payment details as needed */
-
+      payment.user_address_id = userAddressId;
+      payment.credit_card_number = creditCardNumber;
+      payment.cvc = cvc;
+      payment.expiration_date = expirationDate;
+    
       // Save the updated payment to the database
       await payment.save();
 
