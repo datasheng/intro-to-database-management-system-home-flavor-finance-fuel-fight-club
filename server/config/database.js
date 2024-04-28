@@ -22,3 +22,5 @@ const query = (sql, parameters) => new Promise((resolve, reject) => {
 module.exports = {
     query
 };
+
+// okayyyyyyyy
