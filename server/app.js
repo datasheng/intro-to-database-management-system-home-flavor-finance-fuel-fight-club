@@ -7,9 +7,7 @@ const bcrypt = require('bcrypt');
 
 
 const customerRoutes = require('./routes/customerRoutes');
-const bookingRoutes = require('./routes/bookingRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-
+const providerRoutes = require('./routes/providerRoutes');
 
 const app = express();
 
@@ -17,9 +15,6 @@ app.use(express.json()); // For parsing application/json
 app.use(cors()); // Enables CORS
 
 app.use('/api/users', customerRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
-
 // Include any additional routes here...
 
 // 6. Additional endpoints (optional, for direct testing or simple outputs)
