@@ -5,7 +5,7 @@ const router = express.Router();
 // Import the bcrypt library for secure password hashing.
 const bcrypt = require('bcrypt');
 
-const db = require('../helpers/database');
+const db = require('../config/database');
 
 // Import middleware functions from the authMiddleware file.
 const authMiddleware = require('../middlewares/authMiddleware');

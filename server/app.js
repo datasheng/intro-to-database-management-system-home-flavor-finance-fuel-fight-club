@@ -6,7 +6,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 
 
-const userRoutes = require('./routes/userRoutes');
+const customerRoutes = require('./routes/customerRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json()); // For parsing application/json
 app.use(cors()); // Enables CORS
 
-app.use('/api/users', userRoutes);
+app.use('/api/users', customerRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
 
