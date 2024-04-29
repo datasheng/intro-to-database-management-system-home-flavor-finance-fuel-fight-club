@@ -1,7 +1,5 @@
-// Import Sequelize models
-const Customer = require('../models/customerModel');
+const database = require('../config/database');
 
-// Define customerController methods
 const customerController = {
   
   // Method to get user details by ID

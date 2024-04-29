@@ -1,3 +1,4 @@
+/*
 // Import necessary modules
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); 
@@ -114,3 +115,4 @@ connection.connect((err) => {
 
 // Export the Booking model
 module.exports = Booking;
+*/

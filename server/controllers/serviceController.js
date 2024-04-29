@@ -1,7 +1,5 @@
-// Import Sequelize models
-const { Service } = require('../models/serviceModel');
+const database = require('../config/database');
 
-// Define ServiceController methods
 const ServiceController = {
   // Method to get all services
   async getAllServices(req, res) {

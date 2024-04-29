@@ -1,7 +1,5 @@
-// Import Sequelize models
-const { Provider } = require('../models/providerModel');
+const database = require('../config/database');
 
-// Define ProviderController methods
 const ProviderController = {
   // Method to get all providers
   async getAllProviders(req, res) {

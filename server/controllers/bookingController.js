@@ -1,7 +1,5 @@
-// Import your Sequelize models
-const Booking = require('../models/bookingModel');
+const database = require('../config/database');
 
-// Define BookingController methods
 const BookingController = {
   // Method to create a new booking with associated data
   async createBooking(req, res) {

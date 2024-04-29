@@ -1,7 +1,5 @@
-// Import Sequelize models
-const {Payment} = require('../models/paymentModel');
+const database = require('../config/database');
 
-// Define PaymentController methods
 const PaymentController = {
   // Method to process a payment for a booking
   async processPayment(req, res) {

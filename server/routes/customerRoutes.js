@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const db = require('../helpers/database');
 
 // Import middleware functions from the authMiddleware file.
-const { loginHandler, homeHandler, isAuthenticated } = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 router.get('/', (req, res) => {
     res.send('User route is working');
@@ -47,10 +47,10 @@ router.post('/register', async (req, res) => {
 });
 
 // POST route for user login.
-router.post('/login', loginHandler);
+router.post('/login', authMiddleware);
 
 // GET route for the home page, potentially protected by authentication.
-router.get('/home', homeHandler);
+router.get('/home', authMiddleware);
 
 // GET route to access a user's profile, protected to ensure user is authenticated.
 router.get('/profile', (req, res) => {
@@ -65,7 +65,7 @@ router.get('/profile', (req, res) => {
 });
 
 // DELETE route to remove a user by their ID.
-router.delete('/:id', isAuthenticated, (req, res) => {
+router.delete('/:id', authMiddleware, (req, res) => {
     res.json({ msg: "delete a user", userDetails: req.body })
     // Retrieve the user ID from the URL parameter.
     const { id } = req.params;
