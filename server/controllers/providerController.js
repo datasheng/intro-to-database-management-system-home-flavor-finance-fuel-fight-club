@@ -5,11 +5,6 @@ const db = require('../config/database');
 
 const providerController = {
 
-    // Extract information from request body
-    // Check if provider already exists in database
-    // Hash the password using bcrypt
-    // Save provider to the database
-    // Return success message or error message
     registerProvider: async (req, res) => {
       // Extract information from request body
       const { firstName, lastName, email, password, phoneNumber } = req.body;
@@ -42,13 +37,6 @@ const providerController = {
         }
     },
 
-    // Extract login credentials from request body
-    // Validate credentials
-    // Retrieve provider from database using email
-    // Compare password using bcrypt
-    // Generate JWT token if login is successful
-    // Send response with token and provider details
-    // Handle login failures with appropriate error messages
     loginProvider: async (req, res) => {
       // Extract login credentials from request body
       const { email, password } = req.body;
@@ -107,11 +95,8 @@ const providerController = {
           console.error(err.message);
           res.status(500).json({ message: 'Server error during the login process.' });
       }
-  },  
+  },
 
-    // Takes the selected service type as parameter
-    // Retrieve and list all class types under the chosen service type
-    // Example: SELECT id, class_type FROM service WHERE service_type = ?;
     selectClassType: async (req, res) => {
       // Extract the service type from the request parameters
       const { serviceType } = req.params;
@@ -155,10 +140,6 @@ const providerController = {
         }
     },
 
-    // Provider enters details such as street, city, state, zip
-    // Save these details to the address table
-    // Retrieve and return the newly created address ID
-    // Example: INSERT INTO address (street, city, state, zip) VALUES (?, ?, ?, ?);
     enterAddressDetails: async (req, res) => {
       // Extract address details from the request body
       const { addressOne, addressTwo, city, state, zip } = req.body;
@@ -197,9 +178,6 @@ const providerController = {
         }
     },
    
-    // Takes the service ID from selectClassType, address ID from enterAddressDetails, and other class details
-    // Saves the complete class information to the class table
-    // Example: INSERT INTO class (provider_id, service_id, address_id, class_name, cost, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?, ?);
     createClass: async (req, res) => {
       const { serviceType, classType, addressId, className, cost, startTime, endTime } = req.body;
   
@@ -213,14 +191,13 @@ const providerController = {
       const providerId = req.user.provider.id; // Simplified assumption that this is always present
 
       console.log('Provider ID:', providerId);
-if (!providerId) {
-    return res.status(403).json({
-        success: false,
-        message: 'Unauthorized: No provider information found.'
-    });
-}
+      if (!providerId) {
+        return res.status(403).json({
+            success: false,
+            message: 'Unauthorized: No provider information found.'
+        });
+      }
 
-  
       try {
           const serviceSql = 'SELECT id FROM service WHERE service_type = ? AND class_type = ?';
           const [services] = await db.execute(serviceSql, [serviceType, classType]);
@@ -248,14 +225,11 @@ if (!providerId) {
               message: 'Server error occurred while creating the class.'
           });
       }
-  },
+    },
   
-
-    // Retrieve and list all classes linked to the logged-in provider
-    // Example: SELECT * FROM class WHERE provider_id = ?;
     listClasses: async (req, res) => {
       // Assuming the provider ID is extracted from a verified JWT token
-      // This assumes your JWT token verification middleware has already run and attached the provider to req
+      // This assumes that the JWT token verification middleware has already run and attached the provider to req
       if (!req.user.provider || !req.user.provider.id) {
           return res.status(403).json({
               success: false,

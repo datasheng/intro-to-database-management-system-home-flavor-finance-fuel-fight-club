@@ -1,4 +1,3 @@
-// Include necessary libraries and configurations
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../config/database'); 
@@ -21,8 +20,6 @@ exports.registerCustomer = async (req, res) => {
         res.status(500).json({ message: "Server error while registering", error });
     }
 };
-
-
 
 // A function to help a customer log in
 exports.loginCustomer = async (req, res) => {
@@ -115,6 +112,7 @@ exports.loginCustomer = async (req, res) => {
 //       res.status(500).json({ message: "Server error while fetching classes", error });
 //   }
 // };
+
 exports.getClassOptions = async (req, res) => {
     const { serviceType } = req.query; // Assuming the service type is sent as a query parameter
 
@@ -150,13 +148,6 @@ exports.getClassOptions = async (req, res) => {
         res.status(500).send('Error processing your request');
     }
 };
-
-
-
-
-
-
-
 
 exports.getSessionOptions = async (req, res) => {
   // Get the class type from the user's request

@@ -11,7 +11,7 @@ router.post('/login', providerController.loginProvider);
 // Apply authMiddleware to all subsequent routes
 router.use(authMiddleware);
 
-// Routes that require authentication, and potentially specific roles
+// Routes that require authentication, and the specific role of 'customer'
 router.get('/classes/:serviceType', roleMiddleware(['provider']), providerController.selectClassType);
 router.post('/address', roleMiddleware(['provider']), providerController.enterAddressDetails);
 router.post('/create', roleMiddleware(['provider']), providerController.createClass);
