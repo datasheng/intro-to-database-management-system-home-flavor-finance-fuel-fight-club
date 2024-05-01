@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-// Setup a connection pool
+// Setup a connection pool using the promise-based API
 const pool = mysql.createPool({
     connectionLimit: 10, // The maximum number of connections to create at once
     host: 'db-csc-336.cd68y0a605xf.us-east-2.rds.amazonaws.com',    // Your database host
@@ -8,19 +8,20 @@ const pool = mysql.createPool({
     password: 'blahblah4',         // Your database password
     database: 'db_project', // Your database name
     port: 3306            // Your database port
-});
+}).promise();  // Use promise() to get a promise-based interface
 
-// Function to execute SQL queries using the pool
-const query = (sql, parameters) => new Promise((resolve, reject) => {
-    pool.query(sql, parameters, (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
-    });
-});
-
-// Export the query function for use in other parts of your application
-module.exports = {
-    query
+// Function to execute SQL queries using the pool with execute method for prepared statements
+const execute = async (sql, parameters) => {
+    return await pool.execute(sql, parameters);
 };
 
-// okayyyyyyyy
+// Function to execute SQL queries using the pool with query method for regular queries
+const query = async (sql, parameters) => {
+    return await pool.query(sql, parameters);
+};
+
+// Export both execute and query functions for use in other parts of your application
+module.exports = {
+    execute,
+    query
+};

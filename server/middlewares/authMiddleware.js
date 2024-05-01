@@ -10,6 +10,7 @@ const authMiddleware = (req, res, next) => {
       token = req.headers.authorization.split(' ')[1]; // Extract the token from the header
       const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
       req.user = decoded; // Attach user data to the request object
+      console.log('Decoded JWT:', req.user);  // Log decoded token for debugging
       next(); // Proceed to the next middleware
     } catch (error) {
       // Handle errors related to token verification (such as expiration or tampering)
@@ -22,4 +23,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware
+module.exports = authMiddleware;
