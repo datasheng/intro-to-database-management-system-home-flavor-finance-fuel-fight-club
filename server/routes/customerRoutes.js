@@ -11,14 +11,15 @@ router.post('/register', customerController.registerCustomer, errorHandler);
 // Route to login (Public access)
 router.post('/login', customerController.loginCustomer, errorHandler);
 
-// Route to fetch class options (Requires authentication and role chekcing)
-router.get('/classes', authMiddleware, customerController.getClassOptions, errorHandler);
+// Route to fetch class options (Requires authentication)
+router.get('/classes/:serviceType', authMiddleware, customerController.getClassOptions, errorHandler);
 
-// Route to get session times for a specific class (Requires authentication and role checking)
-router.get('/sessions', authMiddleware, customerController.getSessionOptions, errorHandler);
+// Route to get session times for a specific class (Requires authentication)
+router.get('/sessions/:classType', authMiddleware, customerController.getSessionOptions, errorHandler);
 
-// Route to process payment and booking (Requires authentication and role checking)
-router.post('/payment', authMiddleware, roleMiddleware(['customer']), customerController.processPayment, errorHandler);
+// Route to process payment and booking (Requires authentication and specific roles if necessary)
+router.post('/payment', authMiddleware, customerController.processPayment, errorHandler);
+
 
 // Handle 404 Not Found
 router.use(notFound);
