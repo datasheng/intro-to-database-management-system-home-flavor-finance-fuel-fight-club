@@ -116,83 +116,83 @@ exports.loginCustomer = async (req, res) => {
 //   }
 // };
 exports.getClassOptions = async (req, res) => {
-    const { serviceType } = req.query; // Assuming the service type is sent as a query parameter
+  const { serviceType } = req.params; // Accessing the service type from route parameters
 
-    try {
-        // Query to select service IDs from the service table where service type matches (case-insensitive)
-        const serviceQuery = `SELECT id FROM service WHERE LOWER(service_type) = LOWER(?)`;
-        const [services] = await db.query(serviceQuery, [serviceType]);
+  try {
+      
+      console.log('Service Type:', serviceType);
+       // Query to select distinct class types from the service table where service type matches (case-insensitive)
+      const classTypeQuery = `
+          SELECT DISTINCT s.class_type 
+          FROM service s 
+          JOIN class c ON s.id = c.service_id 
+          WHERE c.service_id IN (SELECT id FROM service WHERE LOWER(service_type) = LOWER(?))
+      `;
 
-        // Extract service IDs
-        const serviceIds = services.map(service => service.id);
 
-        // if (serviceIds.length === 0) {
-        //     res.status(404).send('No services found for the specified type.');
-        //     return;
-        // }
+      // Execute the query
+      const [classTypes] = await db.query(classTypeQuery, [serviceType]);
+      console.log('Class types:', classTypes);
+      console.log('Number of class types:', classTypes.length);
 
-        // Generate placeholders for each ID in the serviceIds array
-        const placeholders = serviceIds.map(() => '?').join(', ');
+      // If no class types found, return 404
+      if (classTypes.length === 0) {
+          return res.status(404).send('No class types found for the selected services.');
+      }
 
-        // Query to select class types from the service table where service ID is in the fetched service IDs
-        const classTypeQuery = `SELECT DISTINCT s.class_type FROM service s JOIN class c ON s.id = c.service_id WHERE c.service_id IN (${placeholders})`;
-        const [classTypes] = await db.query(classTypeQuery, serviceIds);
-
-        if (classTypes.length === 0) {
-            res.status(404).send('No class types found for the selected services.');
-            return;
-        }
-
-        // Sending the class types as a response
-        res.json(classTypes.map(ct => ct.class_type));
-    } catch (err) {
-        console.error('Error executing query', err);
-        res.status(500).send('Error processing your request');
-    }
+      // Sending the class types as a response
+      res.json(classTypes.map(ct => ct.class_type));
+  } catch (err) {
+      console.error('Error executing query', err);
+      res.status(500).send('Error processing your request');
+  }
 };
-
-
-
-
-
 
 
 
 exports.getSessionOptions = async (req, res) => {
   // Get the class type from the user's request
-  const { classType } = req.query;
+  const { classType } = req.params;
 
   try {
-      // Prepare a SQL command to find sessions for this class type that are upcoming
-      const query = "SELECT DISTINCT start_time FROM classes WHERE class_type = ? AND start_time >= NOW() ORDER BY start_time";
-      const params = [classType];
+    console.log('Service Type:', classType);
+     // Query to select distinct start times from the class table where class type matches (case-insensitive)
+      const sessionQuery = `
+          SELECT DISTINCT start_time 
+          FROM class c
+          JOIN service s ON c.service_id = s.id
+          WHERE LOWER(s.class_type) = LOWER(?)
+          AND start_time >= NOW() 
+          ORDER BY start_time
+      `;
 
-      // Execute the database query
-      db.query(query, params, (err, sessions) => {
-          if (err) {
-              // If there is a problem with the database, tell the user
-              return res.status(500).json({ message: "Database error", error: err });
-          }
+      // Execute the query
+      const [sessions] = await db.query(sessionQuery, [classType]);
+      console.log('Sessions: ', sessions)
 
-          if (sessions.length === 0) {
-              // If no sessions are found, tell the user
-              return res.status(404).json({ message: "No available sessions found for the selected class type." });
-          }
-
-          // Prepare the session times to send back to the user
-          const sessionOptions = sessions.map(session => ({
-              startTime: session.start_time
-          }));
-
-          // Send the session data back to the user
-          res.json({
-              message: "Available sessions retrieved successfully",
-              sessions: sessionOptions
+      // If no sessions found, return 404
+      if (sessions.length === 0) {
+          return res.status(404).json({
+              message: "No available sessions found for the selected class type."
           });
+      }
+
+      // Prepare the session times to send back to the user
+      const sessionOptions = sessions.map(session => ({
+          startTime: session.start_time
+      }));
+
+      // Send the session data back to the user
+      res.json({
+          message: "Available sessions retrieved successfully",
+          sessions: sessionOptions
       });
   } catch (error) {
       // If something goes wrong, tell the user there was a server error
-      res.status(500).json({ message: "Server error while fetching sessions", error });
+      res.status(500).json({
+          message: "Server error while fetching sessions",
+          error: error.message
+      });
   }
 };
 
