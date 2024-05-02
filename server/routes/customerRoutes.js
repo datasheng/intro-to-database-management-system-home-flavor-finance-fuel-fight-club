@@ -24,7 +24,7 @@ router.get('/classes/:serviceType', authMiddleware, customerController.getClassO
 router.get('/sessions/:classType', authMiddleware, customerController.getSessionOptions, errorHandler);
 
 // Route to process payment and booking (Requires authentication and specific roles if necessary)
-router.post('/payment', authMiddleware, roleMiddleware(['customer']), customerController.processPayment, errorHandler);
+router.post('/payment', authMiddleware, customerController.processPayment, errorHandler);
 
 // Handle 404 Not Found
 router.use(notFound);
