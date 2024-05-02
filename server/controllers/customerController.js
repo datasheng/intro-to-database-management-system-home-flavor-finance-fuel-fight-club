@@ -221,7 +221,7 @@ exports.processPayment = async (req, res) => {
       // Then, we record the booking details in the booking table
       const bookingSql = 'INSERT INTO booking (customer_id, service_id, class_id, payment_info_id) VALUES (?, ?, ?, ?)';
       const bookingParams = [customer_id, service_id, class_id, paymentInfoId];
-      await db.execute(bookingSql, bookingParams);
+      const bookingResult = await db.execute(bookingSql, bookingParams);
 
       // Finally, we tell the user everything was successful
       res.json({
