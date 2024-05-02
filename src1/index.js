@@ -1,15 +1,63 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import ReactDOM from 'react-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import './frontend/style.css'; // Make sure the path to your CSS file is correct
+import Home from './frontend/home';
+import NotFound from './frontend/not-found';
+import Login from './frontend/Login'; // Import the Login component, adjust the path as necessary
+import Signup from './frontend/Signup';
+import Dashboard from './frontend/Dashboard';
+import Profile from './frontend/Profile';
+import FurssanFC from './frontend/pages/FurssanFC';
+import HomeFlavors from './frontend/pages/HomeFlavors';
+import Schedule from './frontend/pages/Schedule';
+import Billing from './frontend/Billing';
+import Provider from './frontend/Provider';
+import Financefuel from './frontend/pages/Financefuel';
+// Example function placeholders, replace with your actual logic
+const handleLogin = (username, password) => {
+  console.log("Logging in with:", username, password);
+  // Add your login logic here (e.g., API call)
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+const navigateToSignup = () => {
+  // Use your routing library (e.g., React Router) to navigate to the signup page
+  console.log("Navigating to signup page");
+};
+const handleSignup = (email,username,dateOfBirth, password, confirmPassword) => {
+  console.log("Logging in with:", email, username,dateOfBirth, password,confirmPassword);
+  // Add your login logic here (e.g., API call)
+};
+const navigateToLogin = () => {
+  // Use your routing library (e.g., React Router) to navigate to the signup page
+  console.log("Navigating to login page");
+};
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} onNavigateToSignup={navigateToSignup} />} />
+        <Route path="/signup" element={<Signup/>}/>
+        <Route path="*" element={<NotFound onLogin={handleSignup} onNavigateToSignup={navigateToLogin}/>} />
+        <Route path="/home" element={<Navigate replace to="/" />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/FurssanFC" element={<FurssanFC/>} />
+        <Route path="/HomeFlavors" element={<HomeFlavors/>} />
+        <Route path="/Schedule" element={<Schedule/>} />
+        <Route path="/Billing" element={<Billing/>} />
+        <Route path="/Provider" element={<Provider/>} />
+        <Route path="/Financefuel" element={<Financefuel/>} />
+      </Routes>
+    </Router>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('app'));
