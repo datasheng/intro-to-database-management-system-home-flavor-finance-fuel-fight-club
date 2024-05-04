@@ -2,9 +2,6 @@ import React from "react";
 import "../styles/HomeFlavors.css";
 import cooking1 from "../pictures/breakfast.jpg";
 import cooking2 from "../pictures/cooking2.jpg";
-import review_stars from "../pictures/stars.png";
-import reviewer1 from "../pictures/reviewer1.jpg";
-import reviewer2 from "../pictures/review2.avif";
 import left_food from "../pictures/food1.avif";
 import left_food2 from "../pictures/food2.jpg";
 import tip1 from "../pictures/tip1.png";
@@ -23,19 +20,9 @@ function HomeFlavors() {
       </div>
 
       <div className="review1" id="review1">
-      <h1> The Perfect Beginner Class:  </h1>
-      <p>"I love how personalized the sessions are, just the right speed for a beginner" </p>
-      <img  id = "stars1" src= {review_stars} alt=""/>
-      <img  id = "reviewer1" src= {reviewer1} alt=""/>
-      <div class="seperator1"></div>
     </div>
 
     <div className="review2" id="review2">
-      <h1> Changed My Life:  </h1>
-      <p>"My family was so impressed by my improvement. I never thought cooking would come so easy." </p>
-      <img  id = "stars2" src= {review_stars} alt=""/>
-      <img  id = "reviewer2" src= {reviewer2} alt=""/>
-      <div class="seperator2"></div>
     </div>
 
       <div className="services" id="services">
