@@ -20,6 +20,9 @@ import Schedule from './frontend/pages/Schedule';
 import Billing from './frontend/Billing';
 import Provider from './frontend/Provider';
 import Financefuel from './frontend/pages/Financefuel';
+import SignupP from './frontend/SignupP';
+import LoginP from './frontend/LoginP';
+import Class from './frontend/Class';
 // Example function placeholders, replace with your actual logic
 const handleLogin = (username, password) => {
   console.log("Logging in with:", username, password);
@@ -55,6 +58,9 @@ const App = () => {
         <Route path="/Billing" element={<Billing/>} />
         <Route path="/Provider" element={<Provider/>} />
         <Route path="/Financefuel" element={<Financefuel/>} />
+        <Route path="/signupP" element={<SignupP/>}/>
+        <Route path="/loginP" element={<LoginP onLogin={handleLogin} onNavigateToSignup={navigateToSignup} />} />
+        <Route path="/Class" element={<Class/>}/>
       </Routes>
     </Router>
   );
