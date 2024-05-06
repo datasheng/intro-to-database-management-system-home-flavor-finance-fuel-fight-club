@@ -18,7 +18,7 @@ router.post('/register', customerController.registerCustomer, errorHandler);
 router.post('/login', customerController.loginCustomer, errorHandler);
 
 // Route to fetch class options (Requires authentication)
-router.get('/classes/:serviceType', authMiddleware, customerController.getClassOptions, errorHandler);
+router.get('/classesSessions/:serviceType', authMiddleware, customerController.getClassAndSessionOptions, errorHandler);
 
 // Route to get session times for a specific class (Requires authentication)
 router.get('/sessions/:classType', authMiddleware, customerController.getSessionOptions, errorHandler);
