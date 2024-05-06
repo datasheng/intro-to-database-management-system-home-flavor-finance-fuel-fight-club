@@ -196,6 +196,54 @@ exports.getSessionOptions = async (req, res) => {
   }
 };
 
+exports.getClassAndSessionOptions = async (req, res) => {
+  const { serviceType } = req.params;
+
+  try {
+    console.log('Service Type:', serviceType);
+
+    // Query to select distinct class types, names, start times, and end times from the service and class tables
+    const query = `
+      SELECT DISTINCT s.class_type, c.name, c.start_time, c.end_time
+      FROM service s
+      JOIN class c ON s.id = c.service_id
+      WHERE LOWER(s.service_type) = LOWER(?)
+        AND c.start_time >= NOW()
+      ORDER BY s.class_type, c.start_time
+    `;
+
+    // Execute the query
+    const [results] = await db.query(query, [serviceType]);
+
+    console.log('Results:', results);
+    console.log('Number of results:', results.length);
+
+    // If no results found, return 404
+    if (results.length === 0) {
+      return res.status(404).send('No class types and sessions found for the selected service type.');
+    }
+
+    // Group the results by class type
+    const classOptions = {};
+    results.forEach(result => {
+      const { class_type, name, start_time, end_time } = result;
+      if (!classOptions[class_type]) {
+        classOptions[class_type] = [];
+      }
+      classOptions[class_type].push({ name, startTime: start_time, endTime: end_time });
+    });
+
+    // Send the response
+    res.json({
+      message: "Class types and sessions retrieved successfully",
+      data: classOptions
+    });
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.status(500).send('Error processing your request');
+  }
+};
+
 // A function to process payment and book a class
 exports.processPayment = async (req, res) => {
   // We get all the necessary information from the user's input
