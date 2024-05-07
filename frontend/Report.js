@@ -1,4 +1,5 @@
 import React from 'react';
+const db = require('../config/database');
 
 
 function DownloadButton() {
