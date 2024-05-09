@@ -1,0 +1,44 @@
+.New_Class {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  form {
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    text-align: left;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  label > select,
+  label > input {
+    margin-left: 10px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
