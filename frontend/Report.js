@@ -1,26 +1,34 @@
 import React from 'react';
-const db = require('../config/database');
 
+function App() {
+    const handleGenerateCSV = () => {
+        fetch('/generate-csv')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'report.csv');
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Error generating CSV:', error);
+            });
+    };
 
-function DownloadButton() {
-  const handleDownload = async () => {
-    try {
-      const response = await fetch('/generate-csv'); // Assuming your server route for generating CSV is '/generate-csv'
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'report.csv');
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
-      console.error('Error downloading CSV:', error);
-    }
-  };
-
-  return (
-    <button onClick={handleDownload}>Download CSV</button>
-  );
+    return (
+        <div>
+            <button onClick={handleGenerateCSV}>Generate CSV</button>
+        </div>
+    );
 }
 
-export default DownloadButton;
+export default App;
+
