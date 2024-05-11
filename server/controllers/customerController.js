@@ -195,12 +195,34 @@ exports.getSessionOptions = async (req, res) => {
 
 // A function to process payment and book a class
 exports.processPayment = async (req, res) => {
+
   // We get all the necessary information from the user's input
   const { 
-      customer_id, service_id, class_id, // IDs needed for the booking
+      class_id, 
       creditCardNumber, cvc, expirationDate, cardholderFirstName, cardholderLastName,
       addressOne, addressTwo, city, state, zipcode
   } = req.body;
+
+  const customerId = req.user.customer.id; // Simplified assumption that this is always present
+
+  console.log('customer ID:', customerId);
+  if (!customerId) {
+    return res.status(403).json({
+      success: false,
+      message: 'Unauthorized: No provider information found.'
+    });
+  }
+  if (
+    !class_id || !creditCardNumber || !cvc || !expirationDate ||
+    !cardholderFirstName || !cardholderLastName || !addressOne || !city || !state || !zipcode
+  ) 
+  {
+    return res.status(400).json({
+      success: false,
+      message: 'Bad request: Missing required parameters.'
+    });
+  }
+
 
   try {
       // First, we save the address information in the database
@@ -216,8 +238,8 @@ exports.processPayment = async (req, res) => {
       const paymentInfoId = paymentResult.insertId;
 
       // Then, we record the booking details in the booking table
-      const bookingSql = 'INSERT INTO booking (customer_id, service_id, class_id, payment_info_id) VALUES (?, ?, ?, ?)';
-      const bookingParams = [customer_id, service_id, class_id, paymentInfoId];
+      const bookingSql = 'INSERT INTO booking (customer_id, class_id, payment_info_id) VALUES (?, ?, ?)';
+      const bookingParams = [customerId, class_id, paymentInfoId];
       const bookingResult = await db.execute(bookingSql, bookingParams);
 
       // Finally, we tell the user everything was successful
@@ -233,3 +255,4 @@ exports.processPayment = async (req, res) => {
       res.status(500).json({ message: 'Server error during the payment and booking process', error });
   }
 };
+
