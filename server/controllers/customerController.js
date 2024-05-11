@@ -114,37 +114,52 @@ exports.loginCustomer = async (req, res) => {
 // };
 
 exports.getClassOptions = async (req, res) => {
-  const { serviceType } = req.params; // Accessing the service type from route parameters
-
-  try {
-      
+      const { serviceType } = req.params;
+  
+    try {
       console.log('Service Type:', serviceType);
-       // Query to select distinct class types from the service table where service type matches (case-insensitive)
-      const classTypeQuery = `
-          SELECT DISTINCT s.class_type 
-          FROM service s 
-          JOIN class c ON s.id = c.service_id 
-          WHERE c.service_id IN (SELECT id FROM service WHERE LOWER(service_type) = LOWER(?))
+  
+      // Query to select distinct class types, names, start times, and end times from the service and class tables
+      const query = `
+        SELECT s.class_type, c.name, c.start_time, c.end_time, c.cost, c.id
+        FROM service s
+        JOIN class c ON s.id = c.service_id
+        WHERE LOWER(s.service_type) = LOWER(?)
+          AND c.start_time >= NOW()
+        ORDER BY s.class_type, c.start_time
       `;
-
-
+  
       // Execute the query
-      const [classTypes] = await db.query(classTypeQuery, [serviceType]);
-      console.log('Class types:', classTypes);
-      console.log('Number of class types:', classTypes.length);
-
-      // If no class types found, return 404
-      if (classTypes.length === 0) {
-          return res.status(404).send('No class types found for the selected services.');
+      const [results] = await db.query(query, [serviceType]);
+  
+      console.log('Results:', results);
+      console.log('Number of results:', results.length);
+  
+      // If no results found, return 404
+      if (results.length === 0) {
+        return res.status(404).send('No class types and sessions found for the selected service type.');
       }
-
-      // Sending the class types as a response
-      res.json(classTypes.map(ct => ct.class_type));
-  } catch (err) {
+  
+      // Group the results by class type
+      const classOptions = {};
+      results.forEach(result => {
+        const { class_type, name, start_time, end_time, cost, id} = result;
+        if (!classOptions[class_type]) {
+          classOptions[class_type] = [];
+        }
+        classOptions[class_type].push({ name, startTime: start_time, endTime: end_time, cost, id});
+      });
+  
+      // Send the response
+      res.json({
+        message: "Class types and sessions retrieved successfully",
+        data: classOptions
+      });
+    } catch (err) {
       console.error('Error executing query', err);
       res.status(500).send('Error processing your request');
-  }
-};
+    }
+  };
 
 exports.getSessionOptions = async (req, res) => {
   // Get the class type from the user's request
