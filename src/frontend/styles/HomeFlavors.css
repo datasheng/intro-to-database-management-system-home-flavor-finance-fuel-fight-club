@@ -63,106 +63,6 @@ body {
   background-color: #440e0e; 
 }
 
-.review1 h1 {
-  position: absolute;
-  margin-top: 10px;
-  margin-left: 100px;
-  top: 12px;
-  width: 250px;
-  font-size: 19px;
-  font-weight: lighter;
-  font-family: Merriweather;
-  color: #ffffff;
-}
-
-.review2 h1 {
-  position: absolute;
-  margin-top: 10px;
-  right: 100px;
-  top: 12px;
-  width: 250px;
-  font-size: 19px;
-  font-weight: lighter;
-  font-family: Merriweather;
-  color: #ffffff;
-}
-
-.review1 p {
-  position: absolute;
-  margin-left: 100px;
-  width: 280px;
-  font-size: 12px;
-  font-weight: lighter;
-  font-family: Georgia;
-  align-items: center;
-  top: 36px;
-  color: #ffffff;
-}
-
-.review2 p {
-  position: absolute;
-  right: 98px;
-  width: 250px;
-  font-size: 12px;
-  font-weight: lighter;
-  font-family: Georgia;
-  align-items: center;
-  top: 36px;
-  color: #ffffff;
-}
-
-
-#stars1 {
-  width: 103px;
-  height: 18px;
-  position: absolute;
-  bottom: 40px;
-  left: 100px;
-}
-
-#stars2 {
-  width: 103px;
-  height: 18px;
-  position: absolute;
-  bottom: 40px;
-  right: 110px;
-}
-
-
-#reviewer1 {
-  width: 50px;
-  height: 75px;
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
-}
-
-#reviewer2 {
-  width: 50px;
-  height: 75px;
-  position: absolute;
-  bottom: 40px;
-  right: 40px;
-}
-
-.seperator1 {
-  position: absolute;
-  left: 412px;
-  height: 60px;
-  top: 30px;
-  width: 1px;
-  background-color: #ffffff;
-}
-
-.seperator2 {
-  position: absolute;
-  right: 420px;
-  height: 60px;
-  top: 30px;
-  width: 1px;
-  background-color: #ffffff;
-}
-
 .services {
   position: absolute;
   top: 799px; 
@@ -195,6 +95,7 @@ body {
   padding: 0;
   font-size: 20px;
   font-weight: lighter;
+  font-family: 'Arial-Narrow';
   color: #000000;
   text-align: center; 
 }
@@ -552,6 +453,7 @@ body {
     padding: 0;
     font-size: 17px;
     font-weight: lighter;
+    font-family: 'Arial-Narrow';
     color: #000000;
     text-align: center; 
   }
@@ -898,6 +800,7 @@ body {
     width: 380px; 
     padding: 0;
     font-size: 19px;
+    font-family: 'Arial-Narrow';
     font-weight: lighter;
     color: #000000;
     text-align: center; 
@@ -1183,6 +1086,7 @@ body {
     padding: 0;
     font-size: 16px;
     font-weight: lighter;
+    font-family: 'Arial-Narrow';
     color: #000000;
     text-align: center; 
   }
@@ -1343,52 +1247,6 @@ body {
   #right_food2 {
     display: none;
   }
-
-  .review1 h1 {
-    display: none;
-  }
-  
-  .review2 h1 {
-    position: absolute;
-    margin-top: 10px;
-    right: 100px;
-    top: 12px;
-    width: 250px;
-    font-size: 14px;
-    font-weight: lighter;
-    font-family: Merriweather;
-    color: #ffffff;
-  }
-  
-  .review1 p {
-    display: none;
-  }
-  
-  .review2 p {
-    position: absolute;
-    right: 98px;
-    width: 250px;
-    font-size: 12px;
-    font-weight: lighter;
-    font-family: Georgia;
-    align-items: center;
-    top: 36px;
-    color: #ffffff;
-  }
-  
-  
-  #stars1 {
-    display: none;
-  }
-  
-  #stars2 {
-    width: 103px;
-    height: 18px;
-    position: absolute;
-    bottom: 40px;
-    right: 110px;
-  }
-  
   
   #reviewer1 {
     display: none;
