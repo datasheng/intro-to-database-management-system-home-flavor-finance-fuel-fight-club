@@ -5,6 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const customerRoutes = require('./routes/customerRoutes');
 const providerRoutes = require('./routes/providerRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors()); // Enables CORS
 
 app.use('/api/users', customerRoutes);
 app.use('/api/providers', providerRoutes);
+app.use('/api/report', reportRoutes);
 
 // Additional endpoints (optional, for direct testing or simple outputs)
 app.get("/", (req, res) => {
