@@ -87,7 +87,7 @@ function Provider() {
             
             if (response.ok) {
                 console.log('Class created successfully:', data);
-                navigate('/classC');
+                navigate('/C');
                 alert('Class created successfully: ' + data.classId);
             } else {
                 console.log('Error creating class:', data.message);
