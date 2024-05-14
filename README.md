@@ -7,3 +7,10 @@ do: npm init
 then: npm install exceljs bcrypt cors dotenv express jsonwebtoken morgan mysql2 nodemon
 
 Make sure you have the .env file in /server with the JWT_SECRET token inside. Also include the PORT number.
+
+### Frontend Setup
+
+npm install
+create package.json, which should include
+
+
