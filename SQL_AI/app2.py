@@ -41,7 +41,7 @@ prompt = [
     The SQL database has multiple tables: booking, address, customer, provider, service, class, and payment info. 
     One SQL command will be something like this SELECT COUNT(*) FROM address ;
     \nExample 2 - Tell me what records are in the booking table? so the SQL command would be something like SELECT * FROM booking;
-    \nExample 3 - Tell me what records are in the booking table? so the SQL command would be something like SELECT * FROM service WHERE service_type = 'home flavors';
+    \nExample 3 - Tell me what records are in the service table where the service type is home flavors? so the SQL command would be something like SELECT * FROM service WHERE service_type = 'home flavors';
     also the sql code should not have ``` in beginning or end and sql word in output
     """
 ]
