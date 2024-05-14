@@ -10,8 +10,8 @@ Make sure you have the .env file in /server with the JWT_SECRET token inside. Al
 
 ### Frontend Setup
 
-### Frontend Setup
 Run `npm install` to install the necessary dependencies.
+
 Create a `package.json` file with the following content:
     ```
     {
@@ -68,11 +68,14 @@ Create a `package.json` file with the following content:
       }
     }
     ```
+    
 If necessary, reinstall `react-scripts` by running `npm install react-scripts`.
+
 Change to the `src` directory:
     ```sh
     cd src
     ```
+    
 Start the development server:
     ```sh
     npm start
