@@ -13,6 +13,7 @@ Make sure you have the .env file in /server with the JWT_SECRET token inside. Al
 Run `npm install` to install the necessary dependencies.
 
 Create a `package.json` file with the following content:
+
 {
   "version": "0.1.0",
   "private": true,
